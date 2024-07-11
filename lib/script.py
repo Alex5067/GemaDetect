@@ -24,6 +24,7 @@ class MyUNetModel:
         colored_mask[mask == 1] = [255, 0, 0]
         blended_image = (1 - alpha) * image + alpha * colored_mask / 255
         return blended_image
+
     def predict(self, image_path, save_dir):
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
