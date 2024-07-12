@@ -15,26 +15,23 @@ void print(const std::string& str) {
 
 int Neu::predict(const string& imagePath) {
     json jsonFile;
-    // Записываем путь к изображению в JSON для передачи d в Python
-    string jsonName = "./data.json";
+    string jsonName = "./lib/data.json";
+    jsonFile["folder"] = folder;
     jsonFile["imageToPredict"] = folder + "/" + imagePath;
     std::ofstream file(jsonName);
     if (file.is_open()) {
-        file << jsonFile.dump(4); // 4 - отступ для форматирования JSON файла
+        file << jsonFile.dump(4);
         file.close();
-        // std::cout << "JSON записан" << std::endl;
     } else {
-        // std::cerr << "Не удалось открыть файл для записи" << std::endl;
+        return 1;
     }
 
-    // Выполняем Python-скрипт
     int result = system("python3 ./lib/script.py");
     if (result != 0) {
         std::cerr << "Error executing Python script" << std::endl;
         return 1;
     }
 
-    // Открываем и читаем JSON файл
     std::ifstream infile(jsonName);
 
     print(imagePath);
