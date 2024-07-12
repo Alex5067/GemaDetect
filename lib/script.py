@@ -16,7 +16,23 @@ class MyUNetModel:
     def __init__(self, model_path):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = torch.load(model_path, map_location=self.device)
-        self.transforms_inference = transforms.Compose(
+
+    def blend_images(self, image, mask, alpha=0.5):
+        image = (image - image.min()) / (image.max() - image.min())
+        mask = mask.astype(np.uint8)
+        colored_mask = np.zeros((*mask.shape, 3), dtype=np.uint8)
+        colored_mask[mask == 1] = [255, 0, 0]
+        blended_image = (1 - alpha) * image + alpha * colored_mask / 255
+        return blended_image
+
+    def predict(self, image_path, save_dir):
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
+        image = Image.open(image_path)
+        width, height = image.size
+
+        transforms_inference = transforms.Compose(
             [
                 transforms.LoadImage(image_only=True),
                 transforms.EnsureChannelFirst(),
@@ -28,20 +44,11 @@ class MyUNetModel:
                     clip=True,
                 ),
                 transforms.CenterScaleCrop(roi_scale=0.8),
-                transforms.ResizeWithPadOrCrop(spatial_size=(768, 768))
+                transforms.ResizeWithPadOrCrop(spatial_size=(width, width))
             ]
         )
-    def blend_images(self, image, mask, alpha=0.5):
-        image = (image - image.min()) / (image.max() - image.min())
-        mask = mask.astype(np.uint8)
-        colored_mask = np.zeros((*mask.shape, 3), dtype=np.uint8)
-        colored_mask[mask == 1] = [255, 0, 0]
-        blended_image = (1 - alpha) * image + alpha * colored_mask / 255
-        return blended_image
-    def predict(self, image_path, save_dir):
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        image = self.transforms_inference(image_path)
+
+        image = transforms_inference(image_path)
         image_tensor = torch.unsqueeze(image, 0).to(self.device)
         with torch.no_grad():
             output = self.model(image_tensor)

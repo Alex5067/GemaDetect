@@ -9,7 +9,7 @@ using namespace std;
 class Neu {
     private:
         string folder;
-        int status = 0; // возможные внутренние переменные
+        // int status = 0; // возможные внутренние переменные
         
         // struct Net // структура, указывающая на сеть, например, вид и имя файла xml или что там может быть
         // {
@@ -26,6 +26,7 @@ class Neu {
         // int examNeu(int info, string img); // проверка, info - не придумал зачем ))), img - имя файла, либо...
         // ~Neu();
 };
+
 
 
 #endif

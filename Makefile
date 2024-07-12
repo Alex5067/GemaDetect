@@ -24,4 +24,6 @@ clean:
 	@rm -rf $(LIB_DIR)/data.json
 	@rm -rf Neu.a Neu.o test testRun.o
 
+install:
+
 rebuild: clean all

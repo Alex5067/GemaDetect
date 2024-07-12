@@ -22,9 +22,9 @@ int Neu::predict(const string& imagePath) {
     if (file.is_open()) {
         file << jsonFile.dump(4); // 4 - отступ для форматирования JSON файла
         file.close();
-        std::cout << "JSON записан" << std::endl;
+        // std::cout << "JSON записан" << std::endl;
     } else {
-        std::cerr << "Не удалось открыть файл для записи" << std::endl;
+        // std::cerr << "Не удалось открыть файл для записи" << std::endl;
     }
 
     // Выполняем Python-скрипт
