@@ -11,3 +11,7 @@ execute_process (
 execute_process (
     COMMAND bash -c "pip3 install torch==2.3.0"
 )
+
+execute_process (
+    COMMAND bash -c "pip3 install pillow==10.4.0"
+)
