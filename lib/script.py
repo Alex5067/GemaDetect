@@ -1,8 +1,4 @@
 import json
-
-
-imagesLibPath = "./images"
-
 import torch
 import numpy as np
 import monai.transforms as transforms
@@ -69,12 +65,13 @@ class MyUNetModel:
         return origin_path, blended_path
     
 if __name__ == '__main__':
-    jsonPath = 'data.json'
+    jsonPath = './lib/data.json'
     with open(jsonPath, 'r') as file:
         data = json.load(file)
         imageToPredict = data['imageToPredict']
-    unplus = MyUNetModel("hema_unet.pth")
-    origPath, finalPath = unplus.predict(imageToPredict, "images")
+        folder = data["folder"]
+    unplus = MyUNetModel("./lib/hema_unet.pth")
+    origPath, finalPath = unplus.predict(imageToPredict, folder)
 
     data = {
         'orig': origPath,

@@ -3,6 +3,6 @@
 
 int main() {
     Neu model("./images");
-    model.predict("kirillTestImage.jpg");
+    model.predict("test1.jpg");
     return 0;
 }
